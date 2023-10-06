@@ -3,8 +3,7 @@ require('dotenv').config()
 // Middleware function for token verification
 function verifyToken(req, res, next) {
   // Get the token from the request headers, query parameters, or wherever you store it
-  const token = req.headers.authorization; // Assuming it's in the "Authorization" header
-
+  const token = (req.headers.authorization).split(" ")[1]; // Assuming it's in the "Authorization" header
   if (!token) {
     return res.status(401).json({ message: 'Access denied. No token provided.' });
   }

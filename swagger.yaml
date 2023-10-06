@@ -1,0 +1,241 @@
+openapi: 3.0.0
+info:
+  title: Task Management API
+  description: API documentation for managing tasks.
+  version: 1.0.0
+servers:
+  - url: http://localhost:8000
+paths:
+  /tasks:
+    post:
+      summary: Add a new task
+      description: Add a new task to the system.
+      security:
+        - BearerAuth: [] # Apply security for this route
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: The title of the task.
+                description:
+                  type: string
+                  description: The description of the task.
+                status:
+                  type: string
+                  enum: [pending, completed]
+                  description: The status of the task (pending or completed).
+              example:
+                title: "Sample Task"
+                description: "This is a sample task."
+                status: "pending"
+      responses:
+        '201':
+          description: Task created successfully.
+        '400':
+          description: Invalid or missing task data.
+        '401':
+          description: Unauthorized. Please provide a valid token.
+        '500':
+          description: Internal server error.
+
+    get:
+      summary: Retrieve all tasks
+      description: Retrieve a list of all tasks in the system.
+      security:
+        - BearerAuth: [] # Apply security for this route
+      responses:
+        '200':
+          description: List of tasks retrieved successfully.
+        '401':
+          description: Unauthorized. Please provide a valid token.
+        '500':
+          description: Internal server error.
+
+  /tasks/{id}:
+    get:
+      summary: Retrieve a specific task by ID
+      description: Retrieve a specific task by its unique ID.
+      security:
+        - BearerAuth: [] # Apply security for this route
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The unique ID of the task to retrieve.
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Task retrieved successfully.
+        '401':
+          description: Unauthorized. Please provide a valid token.
+        '404':
+          description: Task not found.
+        '500':
+          description: Internal server error.
+
+    put:
+      summary: Update a specific task by ID
+      description: Update a specific task by its unique ID.
+      security:
+        - BearerAuth: [] # Apply security for this route
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The unique ID of the task to update.
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                  description: The updated title of the task.
+                description:
+                  type: string
+                  description: The updated description of the task.
+                status:
+                  type: string
+                  enum: [pending, completed]
+                  description: The updated status of the task (pending or completed).
+              example:
+                title: "Updated Task"
+                description: "This is an updated task."
+                status: "completed"
+      responses:
+        '200':
+          description: Task updated successfully.
+        '400':
+          description: Invalid or missing task data.
+        '401':
+          description: Unauthorized. Please provide a valid token.
+        '404':
+          description: Task not found.
+        '500':
+          description: Internal server error.
+
+    delete:
+      summary: Delete a specific task by ID
+      description: Delete a specific task by its unique ID.
+      security:
+        - BearerAuth: [] # Apply security for this route
+      parameters:
+        - in: path
+          name: id
+          required: true
+          description: The unique ID of the task to delete.
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Task deleted successfully.
+        '401':
+          description: Unauthorized. Please provide a valid token.
+        '404':
+          description: Task not found.
+        '500':
+          description: Internal server error.
+  /user/register:
+    post:
+      summary: Register a new user
+      description: Register a new user in the system.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the user.
+                email:
+                  type: string
+                  description: The email of the user.
+                password:
+                  type: string
+                  description: The user's password.
+              example:
+                name: "John Doe"
+                email: "johndoe@example.com"
+                password: "password123"
+      responses:
+        '201':
+          description: User registered successfully.
+        '400':
+          description: Invalid or missing user registration data.
+        '500':
+          description: Internal server error.
+
+  /user/login:
+    post:
+      summary: User login
+      description: Authenticate and log in a user.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  description: The email of the user.
+                password:
+                  type: string
+                  description: The user's password.
+              example:
+                email: "johndoe@example.com"
+                password: "password123"
+      responses:
+        '201':
+          description: User logged in successfully.
+        '400':
+          description: Invalid or missing login credentials.
+        '401':
+          description: Unauthorized. Invalid email or password.
+        '500':
+          description: Internal server error.
+
+  /user/refresh-token:
+    post:
+      summary: Refresh access token
+      description: Generate a new access token using a refresh token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refreshToken:
+                  type: string
+                  description: The refresh token.
+              example:
+                refreshToken: "refresh_token_here"
+      responses:
+        '201':
+          description: Access token refreshed successfully.
+        '400':
+          description: Invalid or missing refresh token.
+        '401':
+          description: Unauthorized. Invalid refresh token.
+        '500':
+          description: Internal server error.
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

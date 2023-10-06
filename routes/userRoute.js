@@ -30,19 +30,19 @@ userRoute.post('/register', async (req, res) => {
     }
 })
 
-//Login Route
+// Login Route
 userRoute.post('/login', async (req, res) => {
     try {
         let { email, password } = req.body
-        //Checking Fields
-        if (!email || !password) return res.status(400).json('Improper Login Fields.');
-        //Checking Email
+        // Checking Fields
+        if (!email || !password) return res.status(400).json({ error: 'Improper Login Fields.', details: 'Both email and password are required.' });
+        // Checking Email
         let user = await userModel.findOne({ email })
-        if (!user) return res.status(404).json('User Not Found')
-        ////Checking Password
+        if (!user) return res.status(404).json({ error: 'User Not Found', details: 'No user with the provided email address.' });
+        // Checking Password
         let passwordcheck = bcrypt.compareSync(password, user.password)
-        if (!passwordcheck) return res.status(401).json("Invalid Password")
-        //Generating Token and RefreshToken
+        if (!passwordcheck) return res.status(401).json({ error: 'Invalid Password', details: 'The provided password is incorrect.' });
+        // Generating Token and RefreshToken
         let token = jwt.sign({ user }, process.env.SECRET, { expiresIn: '1h' })
         let refreshtoken = jwt.sign({ user }, process.env.SECRET, { expiresIn: '2h' })
         
@@ -52,9 +52,10 @@ userRoute.post('/login', async (req, res) => {
             refreshtoken
         })
     } catch (error) {
-        res.status(500).json({ msg: "error in login", error })
+        res.status(500).json({ msg: "error in login", error: error.message });
     }
 })
+
 
 //Generate Token Using RefreshToken
 userRoute.post('/refresh-token', (req, res) => {
