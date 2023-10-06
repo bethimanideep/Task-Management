@@ -5,11 +5,10 @@ const rateLimit = require('express-rate-limit');
 const userRoute = require('./routes/userRoute');
 const taskRoute = require('./routes/task.Route');
 const swaggerUI = require("swagger-ui-express");
-// const specs = require("./swagger");
-
 require('dotenv').config()
 const app = express()
 app.use(express.json())
+app.use(require('cors')())
 
 // Define a rate limiting middleware
 const limiter = rateLimit({
@@ -31,7 +30,7 @@ const options = {
         },
         servers: [
             {
-                url: "",
+                url: "https://task-management-six-lyart.vercel.app",
                 description: "Deployed server",
             },
             {
