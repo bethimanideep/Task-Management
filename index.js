@@ -1,7 +1,7 @@
 const express = require('express')
 const connection = require('./config/db')
 const rateLimit = require('express-rate-limit');
-
+const path=require('path')
 const userRoute = require('./routes/userRoute');
 const taskRoute = require('./routes/task.Route');
 const swaggerUI = require("swagger-ui-express");
@@ -39,7 +39,7 @@ const options = {
             },
         ],
     },
-    apis: ["swagger.yaml"],
+    apis: [path.join(__dirname, "swagger.yaml")],
 };
 const specs = swaggerJsdoc(options);
 //swagger config
