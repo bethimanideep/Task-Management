@@ -40,7 +40,7 @@ const options = {
             },
         ],
     },
-    apis: ["./swagger.yaml"],
+    apis: ["swagger.yaml"],
 };
 const specs = swaggerJsdoc(options);
 //swagger config
