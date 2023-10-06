@@ -4,6 +4,7 @@ info:
   description: API documentation for managing tasks.
   version: 1.0.0
 servers:
+  - url: https://task-management-six-lyart.vercel.app
   - url: http://localhost:8000
 paths:
   /tasks:
