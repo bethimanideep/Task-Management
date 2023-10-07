@@ -74,3 +74,11 @@ SECRET=your_jwt_secret_key
 
 - Middleware is used to log API requests, capturing essential details about incoming requests and responses.
 - This aids in performance monitoring and debugging.
+
+### Contact Information
+
+For any queries and feedback, please contact me at [bethimanideep@gmail.com](mailto:bethimanideep@gmail.com).
+
+---
+
+<h1 align="center">✨Thank You✨</h1>
