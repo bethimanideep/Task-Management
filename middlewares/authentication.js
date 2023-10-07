@@ -4,9 +4,8 @@ require('dotenv').config()
 function verifyToken(req, res, next) {
   // Get the token from the request headers, query parameters, or wherever you store it
   const token = (req.headers.authorization).split(" ")[1]; // Assuming it's in the "Authorization" header
-  if (!token) {
-    return res.status(401).json({ message: 'Access denied. No token provided.' });
-  }
+  if (!token) return res.status(401).json({ message: 'Access denied. No token provided.' });
+
 
   // Verify the token
   jwt.verify(token, process.env.SECRET, (err, decoded) => {
@@ -14,8 +13,8 @@ function verifyToken(req, res, next) {
       return res.status(401).json({ message: 'Invalid token or Expired' });
     }
 
-    // Token is valid; you can access the decoded information in subsequent middleware
-    req.user = decoded.user; // Assuming the token contains user information
+    // Token is valid; you can access the decoded information
+    req.user = decoded.user;
     // Proceed to the next middleware
     next();
   });

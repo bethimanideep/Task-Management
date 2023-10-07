@@ -1,14 +1,23 @@
 const express = require('express')
-const connection = require('./config/db')
+
+const { specs } = require('./swagger');
+const swaggerUI = require("swagger-ui-express");
 const rateLimit = require('express-rate-limit');
-const path=require('path')
+
+const connection = require('./config/db')
 const userRoute = require('./routes/userRoute');
 const taskRoute = require('./routes/task.Route');
-const swaggerUI = require("swagger-ui-express");
+const errorHandlerMiddleware = require('./middlewares/errorHandler');
+const requestLoggerMiddleware = require('./middlewares/requestLogger');
+
 require('dotenv').config()
 const app = express()
 app.use(express.json())
 app.use(require('cors')())
+
+//Middlewares
+app.use(requestLoggerMiddleware);
+app.use(errorHandlerMiddleware)
 
 // Define a rate limiting middleware
 const limiter = rateLimit({
@@ -17,34 +26,8 @@ const limiter = rateLimit({
     message: 'Too many requests, please try again later.',
 });
 
-const swaggerJsdoc = require("swagger-jsdoc");
-
-const options = {
-    swaggerDefinition: {
-        openapi: "3.0.0",
-        info: {
-            title: "tacnique",
-            version: "1.0.0",
-            description:
-                "Comprehensive API documentation for the E-Commerce platform, providing endpoints for user authentication, product management, shopping cart operations, orders, and more.",
-        },
-        servers: [
-            {
-                url: "https://task-management-six-lyart.vercel.app",
-                description: "Deployed server",
-            },
-            {
-                url: "http://localhost:8000",
-                description: "Local server",
-            },
-        ],
-    },
-    apis: [path.join(__dirname, "swagger.yaml")],
-};
-const specs = swaggerJsdoc(options);
 //swagger config
-const CSS_URL =
-    "https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
+const CSS_URL ="https://cdnjs.cloudflare.com/ajax/libs/swagger-ui/4.1.0/swagger-ui.min.css";
 app.use(
     "/api-docs",
     swaggerUI.serve,
@@ -54,6 +37,7 @@ app.use(
 // Apply rate limiting to specific routes
 app.use('/tasks', limiter);
 
+//Routes
 app.use('/user', userRoute)
 app.use('/tasks', taskRoute)
 
@@ -61,7 +45,7 @@ app.get('/', (req, res) => {
     res.json('welcome')
 })
 
-app.listen(process.env.PORT, async () => {
+app.listen(process.env.PORT||8000, async () => {
     try {
         await connection
         console.log('connected to db');
