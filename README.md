@@ -17,7 +17,6 @@ The Task Management API is a robust backend RESTful API developed using Node.js,
 
 Before running the application, make sure to set the following environment variables in a `.env` file in the project root directory:
 ```
-env
 PORT=8000
 MONGODBURL=your_mongodb_connection_url
 SECRET=your_jwt_secret_key
