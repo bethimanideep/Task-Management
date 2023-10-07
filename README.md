@@ -25,7 +25,7 @@ SECRET=your_jwt_secret_key
 
 ## Installation
    ```bash
-   git clone https://github.com/yourusername/Task-Management.git
+   git clone https://github.com/bethimanideep/Task-Management.git
    cd Task-Management
    npm install
    npm run server
